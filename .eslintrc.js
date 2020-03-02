@@ -8,8 +8,8 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
     __DEV__: 'readonly',
   },
+  parser: 'babel-eslint',
   parserOptions: {
-    parser: 'babel-eslint',
     ecmaFeatures: {
       jsx: true,
     },
