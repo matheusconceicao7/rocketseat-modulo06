@@ -1,4 +1,13 @@
 import styled from 'styled-components/native';
+import { ActivityIndicator } from 'react-native';
+
+export const LoadingIndicator = styled(ActivityIndicator).attrs({
+  color: '#000',
+})`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const Container = styled.View`
   flex: 1;
