@@ -25,7 +25,9 @@ const propTypes = {
   }).isRequired,
 };
 
-const defaultProps = {};
+const navigationOptions = {
+  title: 'Usuários',
+};
 
 export default class Main extends Component {
   constructor(props) {
@@ -84,10 +86,6 @@ export default class Main extends Component {
     navigation.navigate('User', { user });
   };
 
-  static navigationOptions = {
-    title: 'Usuários',
-  };
-
   render() {
     const { users, newUser, loading } = this.state;
     return (
@@ -130,4 +128,4 @@ export default class Main extends Component {
 }
 
 Main.propTypes = propTypes;
-Main.defaultProps = defaultProps;
+Main.navigationOptions = navigationOptions;

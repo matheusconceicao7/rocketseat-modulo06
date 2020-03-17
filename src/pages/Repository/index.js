@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Browser } from './styles';
 
@@ -12,14 +12,10 @@ const propTypes = {
   }).isRequired,
 };
 
-export default class Repository extends Component {
-  render() {
-    const { navigation } = this.props;
-    console.tron.log(navigation);
-    const { html_url } = navigation.getParam('repository');
-    console.tron.log(html_url);
-    return <Browser source={{ uri: html_url }} />;
-  }
+export default function Repository(props) {
+  const { navigation } = props;
+  const uri = navigation.getParam('repository').html_url;
+  return <Browser source={{ uri }} />;
 }
 
 Repository.navigationOptions = navigationOptions;
