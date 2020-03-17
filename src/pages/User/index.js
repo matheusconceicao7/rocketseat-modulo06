@@ -18,23 +18,24 @@ import {
 } from './styles';
 // import { Container } from './styles';
 
+const navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam('user').name,
+});
+
 const propTypes = {
   navigation: PropTypes.shape({
     getParam: PropTypes.func,
+    navigate: PropTypes.func,
   }).isRequired,
 };
-
 export default class User extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: navigation.getParam('user').name,
-  });
-
   constructor(props) {
     super(props);
     this.state = {
       stars: [],
       loading: true,
       page: 1,
+      refreshing: false,
     };
   }
 
@@ -49,6 +50,7 @@ export default class User extends Component {
 
     const response = await api.get(`/users/${user.login}/starred?page=${page}`);
     this.setState({
+      refreshing: false,
       loading: false,
       page,
       stars: page > 1 ? [...stars, ...response.data] : response.data,
@@ -61,9 +63,19 @@ export default class User extends Component {
     return this.load(nextPage);
   };
 
+  refreshList = async () => {
+    this.setState({ refreshing: true });
+    return this.load();
+  };
+
+  handleNavigate = repository => {
+    const { navigation } = this.props;
+    navigation.navigate('Repository', { repository });
+  };
+
   render() {
     const { navigation } = this.props;
-    const { stars, loading } = this.state;
+    const { stars, loading, refreshing } = this.state;
     const user = navigation.getParam('user');
     return (
       <Container>
@@ -81,9 +93,11 @@ export default class User extends Component {
             loading={loading}
             onEndReachedThreshold={0.2} // Carrega mais itens quando chegar em 20% do fim
             onEndReached={this.loadMore} // Função que carrega mais itens
+            onRefresh={this.refreshList} // Função dispara quando o usuário arrasta a lista pra baixo
+            refreshing={refreshing}
             renderItem={({ item }) => {
               return (
-                <Starred>
+                <Starred onPress={() => this.handleNavigate(item)}>
                   <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
                   <Info>
                     <Title>{item.name}</Title>
@@ -100,3 +114,4 @@ export default class User extends Component {
 }
 
 User.propTypes = propTypes;
+User.navigationOptions = navigationOptions;
